@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<div class="table-responsive" align="center">
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th></th>
+					<th>
+						<h2 class="sub-header">Add User</h2>
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td width="150">
+					<div th:include="adminTemplates :: left"></div>
+				</td>
+				<td>
+					<div class="col-md-5">
+						<form action="#" th:name="myForm" th:action="@{/admin/add}"
+							th:object="${userForm}" method="POST">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td>Name:</td>
+										<td><input th:name="name" type="text" th:field="*{name}"
+											required="true" /></td>
+										<td><span th:if="${#fields.hasErrors('name')}"
+											th:errors="*{name}"></span></td>
+									</tr>
+									<tr>
+										<td>Password:</td>
+										<td><input type="password" th:field="*{password}" /></td>
+										<td th:if="${#fields.hasErrors('password')}"
+											th:errors="*{password}">Password Error</td>
+									</tr>
+									<tr>
+										<td>Confirm Password:</td>
+										<td><input type="password" th:field="*{confirmPassword}" /></td>
+										<td th:if="${#fields.hasErrors('confirmPassword')}"
+											th:errors="*{confirmPassword}">Password Error</td>
+									</tr>
+									<tr>
+										<td>Nick Name:</td>
+										<td><input type="text" th:field="*{nickName}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Real Name:</td>
+										<td><input type="text" th:field="*{realName}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><button type="submit">Submit</button></td>
+									</tr>
+								</tbody>
+							</table>
+							<input type="hidden" name="sessionId"
+								th:value="${sessionId}" />
+						</form>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

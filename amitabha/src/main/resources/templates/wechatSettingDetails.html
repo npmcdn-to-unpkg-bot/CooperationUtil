@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<div class="table-responsive" align="center">
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th></th>
+					<th>
+						<h2 class="sub-header">Wechat Setting Details for <span th:text="${setting.openId}"></span></h2>
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td width="150">
+					<div th:include="adminTemplates :: left"></div>
+				</td>
+				<td>
+					<div class="col-md-5">
+						<table class="table table-striped">
+							<tbody>
+								<tr>
+									<td>Token:</td>
+									<td th:text="${setting.token}"></td>
+								</tr>
+								<tr>
+									<td>App Id:</td>
+									<td th:text="${setting.appId}"></td>
+								</tr>
+								<tr>
+									<td>Aes Key:</td>
+									<td th:text="${setting.encodingAesKey}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

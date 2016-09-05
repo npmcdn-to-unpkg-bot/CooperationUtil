@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<div th:fragment="left">
+		<script th:inline="javascript" th:src="@{/lib/budhautil.js}"></script>
+		<div>
+			<form id="leftForm" th:name="@{/admin/}" action="#">
+				<input th:name="id" type="hidden"
+					th:value="${AuthorizationInfo.userId}" /> <input
+					th:name="sessionId" type="hidden" th:value="${sessionId}" />
+				<ul>
+					<li class="active"><a href="#" th:href="@{/}">Home</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'details');return false">My
+							Details</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'edit'); return false;">Edit My
+							Profile</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'addUser'); return false;">Add
+							User</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'logout');return false">Sign Off</a></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+	<div th:fragment="fieldsNotSupposedToBeUpdated">
+		<input type="hidden" th:name="id" th:field="*{id}" th:value="${user.id}" />
+		<input type="hidden" th:name="foreignId" th:field="*{foreignId}" th:value="${user.foreignId}" />
+		<input type="hidden" th:name="qqOpenId" th:field="*{qqOpenId}" th:value="${user.qqOpenId}" />
+	</div>
+
+</body>
+</html>

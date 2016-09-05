@@ -1,0 +1,100 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="renderer" content="webkit" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<script>
+		function submitEditForm(userId) {
+			doSubmit("editForm" + userId, "edit");
+		}
+		function submitDeleteForm(userId) {
+			doSubmit("editForm" + userId, "delete");
+		}
+		function submitDetailsForm(userId) {
+			doSubmit("editForm" + userId, "details");
+		}
+	</script>
+
+	<div class="table-responsive" align="center">
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th></th>
+					<th>
+						<h2 class="sub-header" th:text="#{admin.user.list}">Admin
+							User List</h2>
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td width="150">
+					<div th:include="adminTemplates :: left"></div>
+				</td>
+				<td>
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th th:text="#{admin.user.name}">Name</th>
+								<th th:text="#{admin.user.nickName}">Nick Name</th>
+								<th th:text="#{admin.user.actions}">Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="user, iterStat : ${users}">
+								<form th:id="'editForm' + ${user.id}" action="#"
+									th:name="@{/admin/}" th:method="GET">
+									<input type="hidden" th:value="${user.id}" th:name="id" /> <input
+										type="hidden" th:name="sessionId" th:value="${sessionId}" />
+								<td><a href="#"
+									th:onclick="'submitDetailsForm('+${user.id}+');return false;'"
+									th:text="${iterStat.count}"></a></td>
+								<td th:text="${user.name}">name</td>
+								<td th:text="${user.nickName}">Nick Name</td>
+								<td><a href="#" th:if="${user.canBeAdminBy(AuthorizationInfo.role)}"
+									th:onclick="'submitDeleteForm('+${user.id}+');return false;'"
+									class="btn btn-sm btn-link" th:text="#{admin.user.delete}">Delete</a>
+									<a href="#" th:if="${user.canBeAdminBy(AuthorizationInfo.role)}"
+									th:onclick="'submitEditForm('+${user.id}+');return false;'"
+									class="btn btn-sm btn-link" th:text="#{admin.user.edit}">Edit</a>
+								</td>
+								</form>
+							</tr>
+						</tbody>
+					</table>
+
+					<hr /> <script>
+						function setPage(pageNum) {
+							document.getElementById("pagePage").value = pageNum;
+							doSubmit("pageForm", "list");
+						}
+					</script>
+					<form id="pageForm" th:name="@{/admin/}" th:action="@{/admin/list}"
+						method="POST">
+						<a class="btn btn-sm btn-link"
+							th:onclick="'setPage(1);return false;'" href="#"
+							th:text="#{page.first}">First</a> <a th:if="${page.hasPrev()}"
+							class="btn btn-sm btn-link"
+							th:onclick="'setPage(' + ${page.prevPage()} + ');return false;'"
+							href="#" th:text="#{page.prev}">Prev</a> <a
+							th:if="${page.hasNext()}" class="btn btn-sm btn-link"
+							th:onclick="'setPage(' + ${page.nextPage()} + ');return false;'"
+							href="#" th:text="#{page.next}">Next</a> <a
+							class="btn btn-sm btn-link"
+							th:onclick="'setPage(' + ${page.getTotalPage()} + ');return false;'"
+							href="#" th:text="#{page.last}">Last</a> <input id="pagePage"
+							type="text" size="1" th:value="${page.currentPage}"
+							th:name="page" />
+						<button type="submit" class="btn btn-sm btn-link"
+							th:text="#{page.go}">Go</button>
+						<input type="hidden" name="sessionId" th:value="${sessionId}" />
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

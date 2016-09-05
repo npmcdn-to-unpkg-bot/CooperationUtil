@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="qc:admins" content="20512220576151412016052" />
+<title>【阿弥陀佛】吧 - 东林寺网络班 - 安心科技</title>
+<link rel="stylesheet" type="text/css" href="login.css" />
+<link rel="stylesheet" type="text/css" href="easyui/themes/default/easyui.css" />
+<link rel="stylesheet" type="text/css" href="easyui/themes/icon.css" />
+<script type="text/javascript" src="easyui/jquery.min.js"></script>
+<script type="text/javascript" src="easyui/jquery.easyui.min.js"></script>
+<script>
+ function toQQLogin()
+ {
+   //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+   //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+   window.open("/QQLogin","TencentLogin", 
+   "width=450,height=320,menubar=0,scrollbars=1,resizable=1,status=1,titlebar=0,toolbar=0,location=1");
+ } 
+ function totest()
+ {
+   //以下为按钮点击事件的逻辑。注意这里要重新打开窗口
+   //否则后面跳转到QQ登录，授权页面时会直接缩小当前浏览器的窗口，而不是打开新窗口
+   //window.open("/QQLoginCallback?testQQ=testQQ","TencentLogin", 
+   //"width=450,height=320,menubar=0,scrollbars=1,resizable=1,status=1,titlebar=0,toolbar=0,location=1");
+   
+ }
+
+ function afterLoginCompletion(){
+    $("#qqForm").submit();
+ }
+ 
+</script>
+</head>
+<body>
+<div align="center">
+<table><tr><td>
+<div class="form_login">
+			<div class="header fix">
+				<h2>登录</h2>
+			</div>
+	        <div class="oauth_login">
+	            <div class="oauth_frequent fix" style="display: block;">
+	                <a href="#" onclick="toQQLogin();" class="btn qq_btn" data-type="3"><b></b>QQ登录</a>
+					<a href="#" onclick="totest()" class="btn apply_btn"><b></b>申请学员</a>
+	            </div>
+	        </div>
+			<form class="form" th:action="@{/user/login}" method="POST" name="myForm">
+				<div class="clear">&nbsp;</div>
+	            <div class="tr input_wrap loginname_wrap">
+	                <input type="text" required="required" title="别忘了手机/QQ/邮箱" class="loginname" name="userName" id="userName" placeholder="手机号码/邮箱/QQ号" /><i class="iconfont mobile_ico"></i>
+	                <i class="iconfont email_ico"></i>
+	            </div>
+	            <div class="tr input_wrap password_wrap">
+		            <div class="password_wrap1">
+		                <input required="required" title="登陆密码" type="password" class="password" id="password" name="password" placeholder="登陆密码" />
+		            </div>
+	            </div>
+				<div class="tr submit_wrap">
+					<input class="submit" type="submit" value="登 录" />
+				</div>
+				<ul class="quick_nav fix">
+					<li class="first">
+						<input type="checkbox" name="remember" checked="checked" class="common_chk" value="true" />自动登录 
+					</li>
+					<li class="last">
+						<a href="#" onclick="alert('暂时还不支持此功能，请点击QQ登陆或者联系管理员！');return false;" class="forget">忘记密码</a>
+					</li>
+				</ul>
+			</form>
+			<form th:action="@{/user/loginThirdParty}" id="qqForm" method="POST">
+			<input type="hidden" id="qqName" name="qqName" />
+			<input type="hidden" id="qqLogo" name="qqLogo" />
+			<input type="hidden" id="openId" name="openId" />
+			<input type="hidden" id="sessionId" name="sessionId" />
+			<input type="hidden" id="id" name="id" />
+			</form>
+		</div>
+</td></tr></table>
+</div>	
+
+<div align="center">
+<hr/>
+<div>Powered by 安心科技 &copy;</div>
+</div>
+</body>
+</html>

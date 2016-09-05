@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="renderer" content="webkit" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<h2 class="sub-header">User List</h2>
+	<div class="table-responsive" align="center">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Name</th>
+					<th>Nick Name</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user, iterStat : ${users}">
+					<td><a th:href="'/user/details?id=' + ${user.id}" th:text="${iterStat.count}"></a></td>
+					<td th:text="${user.name}">name</td>
+					<td th:text="${user.nickName}">Nick Name</td>
+				</tr>
+			</tbody>
+		</table>
+		<hr />
+		<form action="#" th:action="@{/user/list}" method="POST">
+							<a th:if="${page.hasPrev()}" class="btn btn-sm btn-link" th:href="'/user/list?page=' + ${page.prevPage()}">Prev</a>
+							<a th:if="${page.hasNext()}" class="btn btn-sm btn-link" th:href="'/user/list?page=' + ${page.nextPage()}">Next</a>
+							<input type="text" size="1" th:value="${page.currentPage}" th:name="page" />
+							<button type="submit" class="btn btn-sm btn-link">Go</button>
+						</form>
+	</div>
+</body>
+</html>

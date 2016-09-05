@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+ <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body>
+	<h2 class="sub-header">User Login</h2>
+	<div class="col-md-5">
+		<form action="#" th:name="myForm" th:action="@{/user/login}"
+			th:object="${userLoginForm}" method="POST">
+			<table class="table table-striped">
+				<tbody>
+					<tr>
+						<td>Name:</td>
+						<td><input th:name="userName" type="text" th:field="*{userName}" />
+							</td>
+						<td>
+						<span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></span>
+						</td>
+					</tr>
+					<tr>
+						<td>Password:</td>
+						<td><input type="password" th:field="*{password}" /></td>
+						<td th:if="${#fields.hasErrors('password')}"
+							th:errors="*{password}">Password Error</td>
+					</tr>
+					<tr>
+						<td><button type="submit">Login</button></td>
+						<td><button type="reset">Reset</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

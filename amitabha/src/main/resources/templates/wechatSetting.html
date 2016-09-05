@@ -1,0 +1,72 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+
+
+</head>
+<body>
+	<div class="table-responsive" align="center">
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th></th>
+					<th>
+						<h2 class="sub-header">Wechat Setting for <span th:text="${setting.openId}"></span></h2>
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td width="150">
+					<div th:include="adminTemplates :: left"></div>
+				</td>
+				<td>
+					<div class="col-md-5">
+						<form action="#" th:name="myForm" th:action="@{/wechat/setting}"
+							th:object="${setting}" method="POST">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td>Token:</td>
+										<td><input th:name="token" type="text"
+											th:field="*{token}" th:value="${setting.token}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>App Id:</td>
+										<td><input type="text" th:field="*{appId}" th:name="appId"
+											th:value="${setting.appId}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Aes Key:</td>
+										<td><input type="text" th:field="*{encodingAesKey}" th:name="encodingAesKey"
+											th:value="${setting.encodingAesKey}" /></td>
+									</tr>
+									<tr>
+										<td><a href="javascript:history.back()">Back</a>
+										</td>
+										<td><button type="submit">Submit</button> </td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<input type="hidden" name="sessionId"
+								th:value="${sessionId}" />
+							<input type="hidden" name="wechatId"
+								th:value="${setting.openId}" />
+							<input type="hidden" name="openId"
+								th:value="${setting.openId}" />
+						</form>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>

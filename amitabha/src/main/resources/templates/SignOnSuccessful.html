@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+</head>
+<body onload="init();">
+	<div align="center">
+		<div>
+			<h4>
+				欢迎你！亲爱的 <mark><span id="qqName" th:text="${T(pub.amitabha.util.Base64).getFromBase64(qqName)}"></span></mark> ！您已成功登陆QQ！<img
+					alt="${T(pub.amitabha.util.Base64).getFromBase64(qqName)}" id="qqLogo" th:src="${T(pub.amitabha.util.Base64).getFromBase64(qqLogo)}" />
+			</h4>
+		</div>
+
+		<h2 class="sub-header">
+			绑定用户到 <span th:text="${bindType}"></span>
+		</h2>
+		<table>
+			<tr>
+				<td>
+					<form action="#" th:name="myForm" th:action="@{/bindThirdParty}"
+						th:object="${userLoginForm}" method="POST">
+						<table class="table table-striped">
+							<tbody>
+								<tr>
+									<td>用户名:</td>
+									<td><input th:name="userName" type="text"
+										th:field="*{userName}" /></td>
+									<td><span th:if="${#fields.hasErrors('userName')}"
+										th:errors="*{userName}"></span></td>
+								</tr>
+								<tr>
+									<td>密码:</td>
+									<td><input type="password" th:field="*{password}" /></td>
+									<td th:if="${#fields.hasErrors('password')}"
+										th:errors="*{password}">Password Error</td>
+								</tr>
+								<tr>
+									<td><button type="submit">绑定</button></td>
+									<td><button type="reset">重置</button></td>
+									<td><a href="#">申请成为学员</a></td>
+								</tr>
+							</tbody>
+						</table>
+						<input type="hidden" name="bindType" th:value="${bindType}" /> <input
+							type="hidden" name="openid" th:value="${openid}" /> <input
+							type="hidden" name="token_expirein" th:value="${token_expirein}" />
+						<input type="hidden" name="access_token"
+							th:value="${access_token}" />
+					</form>
+				</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

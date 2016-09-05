@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<body>
+	<div th:fragment="left">
+		<script th:inline="javascript" th:src="@{/lib/budhautil.js}"></script>
+		<div>
+			<form id="leftForm" th:name="@{/user/}" action="#">
+				<input th:name="id" type="hidden"
+					th:value="${AuthorizationInfo.userId}" /> <input
+					th:name="sessionId" type="hidden" th:value="${sessionId}" />
+				<ul>
+					<li class="active"><a href="#" th:href="@{/}">Home</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'details');return false">My
+							Details</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'edit'); return false;">Edit My
+							Profile</a></li>
+					<li><a href="#"
+						onclick="doSubmit('leftForm', 'logout');return false">Sign Off</a></li>
+				</ul>
+			</form>
+		</div>
+	</div>
+
+</body>
+</html>

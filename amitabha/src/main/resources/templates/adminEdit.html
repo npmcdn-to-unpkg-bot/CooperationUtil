@@ -1,0 +1,117 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css"
+	rel="stylesheet" />
+
+<script th:inline="javascript">
+//Get the original value when initial loading..
+/*<![CDATA[*/
+var oValue = /*[[${user.role}]]*/'0';
+var myRole = /*[[${AuthorizationInfo.role}]]*/'2';
+/*]]>*/
+</script>
+<script>
+/**
+ * Initialization actions when the page is loaded.
+ */
+function initial() {
+	//Use javascript instead of th:selected in the HTML.
+	document.getElementById("selection").value = oValue;
+}
+
+function checkField(sel) {
+	var resp;
+
+	if(lessThan(myRole, sel.value)){
+		sel.value = oValue;
+		alert("不能超过自己的权限！");
+		return false;
+	}
+
+	resp = confirm("确定要转角色吗？");
+
+	if(!resp) {
+		sel.value = oValue;
+	} else {
+		oValue = sel.value; 
+	}
+}
+</script>
+
+</head>
+<body onload="javascript:initial();">
+	<div class="table-responsive" align="center">
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th></th>
+					<th>
+						<h2 class="sub-header">Admin User Edit</h2>
+					</th>
+				</tr>
+			</thead>
+			<tr>
+				<td width="150">
+					<div th:include="adminTemplates :: left"></div>
+				</td>
+				<td>
+					<div class="col-md-5">
+						<form action="#" th:name="myForm" th:action="@{/admin/update}"
+							th:object="${userForm}" method="POST">
+							<table class="table table-striped">
+								<tbody>
+									<tr>
+										<td>Name:</td>
+										<td><input th:name="name" type="text" readonly="readonly"
+											th:field="*{name}" th:value="${user.name}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Role:</td>
+										<td>
+										<!-- You can not use th:field along with th:selected -->
+										<select id="selection" th:field="*{role}" th:name="role" onchange="checkField(this)">
+										    <option th:value="0" >Pending</option>
+										    <option th:value="1" >Normal</option>
+										    <option th:value="2" >Admin</option>
+										    <option th:value="9" >Super Admin</option>
+										    <option th:value="-1" >Invalid</option>
+										    <!-- option th:value="0" th:selected="${user.role} == 0">Pending</option-->
+										</select></td>
+									</tr>
+									<tr>
+										<td>Nick Name:</td>
+										<td><input type="text" th:field="*{nickName}"
+											th:value="${user.nickName}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td>Real Name:</td>
+										<td><input type="text" th:field="*{realName}"
+											th:value="${user.realName}" /></td>
+										<td></td>
+									</tr>
+									<tr>
+										<td><a href="javascript:history.back()">Back</a>
+										</td>
+										<td><button type="submit">Submit</button> </td>
+										<td></td>
+									</tr>
+								</tbody>
+							</table>
+							<div th:include="adminTemplates ::  fieldsNotSupposedToBeUpdated"></div>
+							<input type="hidden" name="sessionId"
+								th:value="${sessionId}" />
+						</form>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+</body>
+</html>
