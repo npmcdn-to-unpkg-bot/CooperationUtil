@@ -1,0 +1,172 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Admin Settings</title>
+  <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+  <!-- Optional Bootstrap Theme -->
+  <link href="data:text/css;charset=utf-8," data-href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css" rel="stylesheet" id="bs-theme-stylesheet" />
+  <link href="/lib/docs.min.css" rel="stylesheet" />
+  <script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+  <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+<script th:inline="javascript">
+  //Get the original value when initial loading..
+  /*<![CDATA[*/
+  var urlList = /*[[@{/admin/settings/list}]]*/'/admin/settings/list';
+  var sessionId = /*[[${sessionId}]]*/'';
+  /*]]>*/
+</script>
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+  <script src="http://cdn.bootcss.com/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+  <!-- script>
+    var _hmt = _hmt || [];
+  </script-->
+
+  <script src="/lib/base64.js"></script>
+  <script src="/lib/budhautil.js"></script>
+</head>
+<body>
+  <script src="//cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+  <script src="//unpkg.com/vue-validator@2.1.7/dist/vue-validator.min.js"></script>
+  <!-- Load the javascripts before this table, because dont want to show weird thing before rendering -->
+<form novalidate="novalidate">
+  <input type="hidden" id="editingIndex" />
+</form>
+  <div id="app" align="center" class="container">
+    
+    <table class="table table-responsive">
+      <ul>
+        <thead>
+          <tr>
+            <td>
+            <form class="form-horizontal" role="form">
+            <div  class="form-group">
+              <label for="aButton"><h4>List of the settings</h4></label>
+              <button id="addButton" type="button"
+                class="btn btn-success btn-sm" v-on:click="showAddItem"
+                data-toggle="tooltip" 
+                data-placement="bottom" 
+                title="Add a new setting to the list!">+</button>
+              <button id="sbmButton" type="button"
+                class="btn btn-success btn-sm" v-on:click="submitChange"
+                data-toggle="tooltip" 
+                data-placement="bottom" 
+                title="Submit the change to server">Submit</button>
+              <button id="sbmButton" type="button"
+                class="btn btn-success btn-sm" v-on:click="resetChange"
+                data-toggle="tooltip" 
+                data-placement="bottom" 
+                title="Reset to original list">Reset</button>
+            </div>
+            </form>
+            </td>
+            <td>
+              <h4>Actions</h4>
+            </td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="item in items">
+            <td>
+            <form class="form-horizontal" role="form">
+            <div class="col-xs-6">
+              <li><span id="itemList"><kbd>{{key(item)}}</kbd> - <code>{{value(item)}}</code></span></li>
+            </div>
+            </form>
+            </td>
+            <td>
+            <form class="form-horizontal" role="form">
+            <div class="form-group">
+              <button type="button" class="btn btn-primary btn-xs"
+                data-toggle="modal" v-on:click="showEditItem($index)" 
+                data-placement="left" 
+                title="Change the value of this item">Edit</button>
+              <button type="button" class="btn btn-primary btn-xs"
+                v-on:click="removeItem(item)"
+                data-toggle="tooltip" 
+                data-placement="right" 
+                title="Remove the item!">&nbsp;&nbsp;-&nbsp;&nbsp;</button>
+            </div>
+            </form>
+            </td>
+                
+          </tr>
+        </tbody>
+      </ul>
+    </table>
+  <!-- Modal -->
+  <validator name="validation">
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+            <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">{{currentAction}}ing an item</h4>
+        </div>
+        <div class="modal-body">
+          <table>
+            <tr>
+              <td>
+                <form novalidate="novalidate" class="form" role="form">
+                  <div v-show="and(inputted, !$validation.valid)" class="alert alert-danger alert-dismissible fade in" role="alert">
+                    <h4>Dear, there must be something wrong!</h4>
+                    <p v-show="and(inputted, $validation.inputKey.minlength)">
+                      <code><strong class="text-danger">** Your key is too short.</strong></code>
+                    </p>
+                    <p v-if="$validation.inputKey.maxlength">
+                      <code><strong class="text-danger">** Your key is too long.</strong></code>
+                    </p>
+                    <p v-show="and(inputted, $validation.inputValue.minlength)">
+                      <code><strong class="text-danger">** Your value is too short.</strong></code>
+                    </p>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="inputKey">Key</label>
+                    <input type="text" v-validate:input-key="{minlength: 3, maxlength: 30 }"
+                           v-model="newItem.key" class="form-control" id="inputKey"
+                           placeholder="&lt;Enter&gt; the Key" /> 
+                    <label for="inputValue">Value</label>
+                    <input type="text"
+                           v-validate:input-value="{minlength: 3}"
+                           v-model="newItem.value" class="form-control" id="inputValue"
+                           placeholder="&lt;Enter&gt; the Value" />
+                    <div v-if="currentAction=='Add'">
+                      <button v-if="$validation.valid" type="button" class="btn btn-success btn-sm" v-on:click="addItem">Add</button>
+                      <button v-if="and(inputted, !$validation.valid)" type="button" class="btn btn-danger btn-sm" disable="true">Add</button>
+                      <button v-if="!inputted" type="button" class="btn btn-primary btn-sm" disable="true">Add</button>
+                    </div>
+                    <div v-else="v-else">
+                      <button v-if="$validation.valid" type="button" class="btn btn-success btn-sm" v-on:click="editItem()">Edit</button>
+                      <button v-if="and(inputted, !$validation.valid)" type="button" class="btn btn-danger btn-sm" disable="true">Edit</button>
+                      <button v-if="!inputted" type="button" class="btn btn-primary btn-sm" disable="true">Edit</button>
+                    </div>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Login</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  </validator>
+  
+  </div>
+
+  <script src="/lib/adminSetting.vue.js">
+  </script>
+</body>
+</html>

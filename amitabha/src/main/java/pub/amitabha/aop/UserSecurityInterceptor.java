@@ -20,6 +20,8 @@ import pub.amitabha.util.ObjectStringConverter;
 public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
 
 	private static boolean isRedirectView(ModelAndView mv) {
+		if(mv == null)
+			return false;
 
 		String viewName = mv.getViewName();
 		if (viewName.startsWith(REDIRECT_URL_PREFIX)) {
@@ -99,7 +101,8 @@ public class UserSecurityInterceptor extends HandlerInterceptorAdapter {
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView model)
 			throws Exception {
-		if (request.getServletPath().endsWith("logout")) {
+		if (request.getServletPath().endsWith("logout") || model==null) {
+			//For restful view, model is null, return
 			return;
 		}
 
